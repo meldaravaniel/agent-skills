@@ -1,0 +1,17 @@
+{
+  "search_root": "$AGENTS_REPOS_ROOT",
+  "repos": [
+    {
+      "name": "gamma",
+      "path": "$AGENTS_REPOS_ROOT/gamma",
+      "remote_url": "git@github.com:org/gamma-old.git",
+      "stack": "Python"
+    },
+    {
+      "name": "omega",
+      "path": "$AGENTS_REPOS_ROOT/omega",
+      "remote_url": "git@github.com:org/omega.git",
+      "stack": "Terraform"
+    }
+  ]
+}

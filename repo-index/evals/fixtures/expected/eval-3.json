@@ -1,0 +1,17 @@
+{
+  "search_root": "$AGENTS_REPOS_ROOT",
+  "repos": [
+    {
+      "name": "alpha",
+      "path": "$AGENTS_REPOS_ROOT/alpha",
+      "remote_url": "git@github.com:org/alpha.git",
+      "stack": "Node.js"
+    },
+    {
+      "name": "gamma",
+      "path": "$AGENTS_REPOS_ROOT/gamma",
+      "remote_url": "git@github.com:org/gamma.git",
+      "stack": "Python"
+    }
+  ]
+}
