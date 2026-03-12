@@ -14,10 +14,13 @@ makes a metadata file of all your checked-out repos
   * if you don't have that, it stops and tells you to make it and restart your terminal
 * finds all folders in that root that has a `.git` folder
 * asks you if you want to ignore any of them
-* creates a metadata file `repos.json` of all your git repos with
+* creates metadata of all your git repos with:
   * project name
   * file path (using the env-var so the skill stays re-usable)
   * tech stack: unknown, or one or more of: Angular, Node.js, Go, Java (Maven), Python, Docker, Terraform, Kustomize, Helm, Rust, Ruby, Elixer (is not exhaustive cuz I trained it on the junk I had checked out)
+* asks you where you want to store that metadata file
+  * defaults the name to `repos.json`
+  * So far, I prefer to have a copilot "home base", so I'm keeping the file there
  
 #### Why? 
 
