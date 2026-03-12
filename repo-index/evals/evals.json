@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "Please index my git repos. Note: AGENTS_REPOS_ROOT is set to ~/code/ceridwen/repo-index/evals/fixtures/code.",
+      "prompt": "Please index my git repos. Note: AGENTS_REPOS_ROOT is set to the `evals/fixtures/code` directory relative to this skill's SKILL.md.",
       "expected_output": "A valid repos.json written to the scratch directory containing alpha (Node.js), beta (Go), delta (unknown), and gamma (Python), sorted alphabetically by name. Paths use the $AGENTS_REPOS_ROOT prefix. A summary table is shown to the user.",
       "files": [],
       "golden_file": "evals/fixtures/expected/eval-0.json",
@@ -15,7 +15,7 @@
     },
     {
       "id": 1,
-      "prompt": "Index my repos. Note: AGENTS_REPOS_ROOT is set to ~/code/ceridwen/repo-index/evals/fixtures/code.",
+      "prompt": "Index my repos. Note: AGENTS_REPOS_ROOT is set to the `evals/fixtures/code` directory relative to this skill's SKILL.md.",
       "expected_output": "The skill detects that the output file already exists and asks whether to overwrite or merge before proceeding. It does not scan or write anything until the user answers.",
       "files": ["evals/fixtures/repos.json"],
       "expectations": [
@@ -26,7 +26,7 @@
     },
     {
       "id": 2,
-      "prompt": "Merge a fresh scan into my repos index. Note: AGENTS_REPOS_ROOT is set to ~/code/ceridwen/repo-index/evals/fixtures/code.",
+      "prompt": "Merge a fresh scan into my repos index. Note: AGENTS_REPOS_ROOT is set to the `evals/fixtures/code` directory relative to this skill's SKILL.md.",
       "expected_output": "The skill reads the existing repos.json (which has gamma with a stale remote URL, and omega which no longer exists on disk), scans, and writes a merged result sorted alphabetically by name. gamma's remote_url is updated. omega is preserved. alpha, beta, and delta are added.",
       "files": ["evals/fixtures/repos.json"],
       "golden_file": "evals/fixtures/expected/eval-2.json",
@@ -37,7 +37,7 @@
     },
     {
       "id": 3,
-      "prompt": "Index my repos. Leave out beta and delta. Note: AGENTS_REPOS_ROOT is set to ~/code/ceridwen/repo-index/evals/fixtures/code.",
+      "prompt": "Index my repos. Leave out beta and delta. Note: AGENTS_REPOS_ROOT is set to the `evals/fixtures/code` directory relative to this skill's SKILL.md.",
       "expected_output": "The skill discovers all 4 repos, presents the list, excludes beta and delta per the user's instruction, and writes a repos.json containing only alpha and gamma sorted alphabetically.",
       "files": [],
       "golden_file": "evals/fixtures/expected/eval-3.json",
@@ -60,7 +60,7 @@
     },
     {
       "id": 5,
-      "prompt": "Index my repos. Overwrite if a repos index already exists. Note: AGENTS_REPOS_ROOT is set to ~/code/ceridwen/repo-index/evals/fixtures/code.",
+      "prompt": "Index my repos. Overwrite if a repos index already exists. Note: AGENTS_REPOS_ROOT is set to the `evals/fixtures/code` directory relative to this skill's SKILL.md.",
       "expected_output": "The skill detects the existing file, overwrites it with a fresh scan, and produces a repos.json containing exactly alpha, beta, delta, and gamma sorted alphabetically. The stale gamma remote URL and the omega entry from the original file are gone.",
       "files": ["evals/fixtures/repos.json"],
       "golden_file": "evals/fixtures/expected/eval-5.json",
