@@ -4,7 +4,7 @@ This is a collection of the stuff I've put together to make my own work...faster
 
 ## Made by me (and copilot, ofc)
 
-### repo-index
+### [repo-index](/repo-index/SKILL.md)
 
 makes a metadata file of all your checked-out repos
 
@@ -25,7 +25,7 @@ To save subsequent skills from having to look in every single folder for relevan
 
 ## Made by others, modified by me
 
-### skills-creator
+### [skills-creator](/skills-creator/SKILL.md)
 
 This is my modification of Anthropic's [skills-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator).  
 
