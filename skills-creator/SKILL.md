@@ -149,6 +149,8 @@ After writing the skill draft, come up with 2-3 realistic test prompts — the k
 
 Save test cases to `evals/evals.json`. Don't write expectations yet — just the prompts. You'll draft expectations in the next step while the runs are in progress.
 
+**Portability**: Eval prompts must not contain hardcoded absolute paths (e.g. ~/code/username/... or /home/username/...). When a prompt needs to reference fixture locations, use path language relative to the skill: "FIXTURES_ROOT is set to the evals/fixtures/code directory relative to this skill's SKILL.md". Fixture files (e.g. metadata.json) that reference filesystem paths should use environment variable placeholders like $FIXTURES_ROOT rather than expanded paths.
+
 **If the skill writes files**, output goes to `with_skill/outputs/` (or `without_skill/outputs/`). Input fixtures live in `evals/fixtures/` and must stay untouched by test runs. When a skill needs a fixture as its starting point (e.g. an existing file to merge into), copy it into the `outputs/` directory before spawning.
 
 ```json
@@ -200,15 +202,15 @@ This keeps `evals.json` reusable across iterations.
 Execute this task:
 - Skill path: <path-to-skill>
 - Task: <eval prompt>
-- Working directory: <workspace>/iteration-<N>/eval-<ID>/with_skill/outputs/ (fixtures already copied here)
+- Working directory: <workspace>/<iteration-id>/<eval-id>/with_skill/outputs/ (fixtures already copied here)
 - Save all outputs to this same directory
 ```
 
 **Baseline run** (same prompt, but the baseline depends on context):
-- **Creating a new skill**: no skill at all. Same prompt, no skill path, save to `without_skill/outputs/`.
+- **Creating a new skill**: no skill at all. Same prompt, no skill path, save to `<workspace>/<iteration-id>/<eval-id>/without_skill/outputs/`.
 - **Improving an existing skill**: the old version. Before editing, snapshot the skill (`cp -r <skill-path> <workspace>/skill-snapshot/`), then point the baseline subagent at the snapshot. Save to `old_skill/outputs/`.
 
-Write an `eval_metadata.json` for each test case (expectations can be empty for now). Give each eval a descriptive name based on what it's testing — not just "eval-0". Use this name for the directory too. If this iteration uses new or modified eval prompts, create these files for each new eval directory — don't assume they carry over from previous iterations.
+Write an `eval_metadata.json` for each test case (expectations can be empty for now) that includes a descriptive name, `eval_name`, based on what the eval is testing. If this iteration uses new or modified eval prompts, create an `eval_metadata.json` for each new eval directory — don't assume they carry over from previous iterations.
 
 ```json
 {
@@ -245,7 +247,7 @@ This is the only opportunity to capture this data — it comes through the task 
 
 Once all runs are done:
 
-1. **Grade each run** — spawn a grader subagent (or grade inline) that reads `agents/grader.md` and evaluates each expectation against the outputs. Save results to `grading.json` directly in the config directory (e.g., `with_skill/grading.json`, `without_skill/grading.json`). The grading.json expectations array must use the fields `text`, `passed`, and `evidence` (not `name`/`met`/`details` or other variants) — the viewer depends on these exact field names. For expectations that can be checked programmatically, write and run a script rather than eyeballing it — scripts are faster, more reliable, and can be reused across iterations.
+1. **Grade each run** — spawn a grader subagent (or grade inline) that reads `agents/grader.md` and evaluates each expectation against the outputs. Save results to `grading.json` directly in the eval's directory (e.g., `<workspace>/<iteration-id>/<eval-id>/with_skill/grading.json`, `<workspace>/<iteration-id>/<eval-id>/without_skill/grading.json`). The grading.json expectations array **must** use the fields `text`, `passed`, and `evidence` (not `name`/`met`/`details` or other variants) — the viewer depends on these exact field names. For expectations that can be checked programmatically, write and run a script rather than eyeballing it — scripts are faster, more reliable, and can be reused across iterations.
 
 2. **Aggregate into benchmark** — run the aggregation script from the skill-creator directory:
    ```bash
@@ -260,14 +262,14 @@ Put each with_skill version before its baseline counterpart.
    ```bash
    nohup python <skill-creator-path>/eval-viewer/generate_review.py \
      <workspace>/iteration-N \
-     --skill-name "my-skill" \
+     --skill-name <skill-name> \
      --benchmark <workspace>/iteration-N/benchmark.json \
      > /dev/null 2>&1 &
    VIEWER_PID=$!
    ```
    For iteration 2+, also pass `--previous-workspace <workspace>/iteration-<N-1>`.
 
-   **Cowork / headless environments:** If `webbrowser.open()` is not available or the environment has no display, use `--static <output_path>` to write a standalone HTML file instead of starting a server. Feedback will be downloaded as a `feedback.json` file when the user clicks "Submit All Reviews". After download, copy `feedback.json` into the workspace directory for the next iteration to pick up.
+   **Cowork / headless environments:** If `webbrowser.open()` is not available or the environment has no display, use `--static <workspace>/iteration-N/review.html` to write a standalone HTML file instead of starting a server. Feedback will be downloaded as a `feedback.json` file when the user clicks "Submit All Reviews". After download, copy `feedback.json` into the workspace directory for the next iteration to pick up.
 
 Note: please use generate_review.py to create the viewer; there's no need to write custom HTML.
 
